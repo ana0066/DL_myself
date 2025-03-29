@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribuidora Lorenzo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Distribuidora Lorenzo</h1>
+        <div class="icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-user"></i>
+            <i class="fas fa-shopping-cart" onclick="toggleCart()"></i>
+            <span id="cart-count">0</span>
+        </div>
+    </header>
+
+    <main>
+        <div id="product-list">
+            <?php
+            $conn = new mysqli('localhost', 'root', '', 'distribuidoral');
+            if ($conn->connect_error) {
+                die('Error de conexión: ' . $conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM products";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<div class='product'>
+                            <img src='{$row['urlImagen']}' alt='{$row['nombre']}'>
+                            <h3>{$row['nombre']}</h3>
+                            <p>En stock: {$row['existencia']}</p>
+                            <p>Precio: $ {$row['valor']}</p>
+                            <button onclick='agregarAlCarrito({$row['id']}, \"{$row['nombre']}\", {$row['valor']}, \"{$row['urlImagen']}\")'>Agregar al Carrito</button>
+                          </div>";
+                }
+            }
+            $conn->close();
+            ?>
+        </div>
+    </main>
+
+    <aside id="cart">
+        <span class="close-btn" onclick="toggleCart()">&times;</span>
+        <h2>Carrito de Compras</h2>
+        <div id="cart-items"></div>
+        <div id="cart-total">Total: $0</div>
+        <button onclick="finalizarPago()">Finalizar Pago</button>
+    </aside>
+
+    <script>
+        let carrito = {};
+
+        function toggleCart() {
+            const cart = document.getElementById('cart');
+            cart.style.display = cart.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function actualizarCarrito() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            cartItems.innerHTML = '';
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            for (let id in carrito) {
+                const item = carrito[id];
+                totalItems += item.cantidad;
+                totalPrice += item.precio * item.cantidad;
+                cartItems.innerHTML += `
+                    <div class="cart-item">
+                        <img src="${item.imagen}" alt="${item.nombre}">
+                        <div>
+                            <p>${item.nombre}</p>
+                            <p>Precio: $ ${item.precio}</p>
+                            <p>Cantidad: <input type="number" value="${item.cantidad}" min="0" onchange="cambiarCantidad(${id}, this.value)"></p>
+                        </div>
+                    </div>`;
+            }
+
+            document.getElementById('cart-count').innerText = totalItems;
+            cartTotal.innerText = `Total: $${totalPrice}`;
+        }
+
+        function agregarAlCarrito(id, nombre, precio, imagen) {
+            if (!carrito[id]) {
+                carrito[id] = { nombre, precio, imagen, cantidad: 0 };
+            }
+            carrito[id].cantidad++;
+            actualizarCarrito();
+        }
+
+        function cambiarCantidad(id, cantidad) {
+            if (cantidad <= 0) {
+                delete carrito[id];
+            } else {
+                carrito[id].cantidad = parseInt(cantidad);
+            }
+            actualizarCarrito();
+        }
+
+        function finalizarPago() {
+            alert('Pago finalizado.');
+            carrito = {};
+            actualizarCarrito();
+        }
+    </script>
+</body>
+</html>
