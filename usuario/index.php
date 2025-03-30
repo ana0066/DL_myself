@@ -18,7 +18,7 @@
         </div>
     </header>
 
-    <main>
+    <main class="products-container">
         <div id="product-list">
             <?php
             $conn = new mysqli('localhost', 'root', '', 'distribuidoral');

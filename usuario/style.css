@@ -21,11 +21,19 @@ header .icons i {
     cursor: pointer;
 }
 
+
+.products-container {
+    display: flex;
+    justify-content: center;
+}
+
 #product-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
+    max-width: 900px; /* Ajusta el ancho máximo para centrar */
+    width: 100%;
 }
 
 .product {
@@ -124,3 +132,6 @@ header .icons i {
 #cart button:hover {
     background-color: #0056b3;
 }
+
+
+

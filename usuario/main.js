@@ -1,5 +1,6 @@
 // Variables globales
 let productos = [];
+let carrito = JSON.parse(localStorage.getItem('carrito')) || {};
 
 // Referencias al DOM
 const contenedor = document.getElementById('contenedor');
@@ -49,7 +50,12 @@ function comprar(nombreProducto) {
         }
     })
     .catch(error => console.error('Error en la compra:', error));
+
+    localStorage.setItem('carrito', JSON.stringify(carrito)); // Guardar en LocalStorage
+    actualizarCarrito();
 }
+
+
 
 // Cargar productos al cargar la página
 window.onload = fetchProductos;

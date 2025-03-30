@@ -49,8 +49,8 @@ header {
     align-items: center;
     justify-content: flex-start;
     background-color: #2D4263;
-    height: 400px;
-    width: 400px;
+    height: 300px;
+    width: 300px;
     border-radius: 20px;
     flex-direction: column;
     padding-top: 35px;
