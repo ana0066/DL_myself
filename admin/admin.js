@@ -126,6 +126,7 @@ document.getElementById("botonAñadir").addEventListener("click", function (even
       showMessage('error', 'Error al agregar el producto');
     }
   })
+  
   .catch(error => {
     console.error('Error en la petición de agregar producto:', error);
   });

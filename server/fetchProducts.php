@@ -2,7 +2,7 @@
 include 'db.php';
 header('Content-Type: application/json');
 
-$sql = "SELECT * FROM products";
+$sql = "SELECT * FROM productos";
 $stmt = $pdo->query($sql);
 $productos = $stmt->fetchAll();
 
